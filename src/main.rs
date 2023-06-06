@@ -5,12 +5,15 @@ mod tokio;
 
 use crate::tokio::TokioRuntimeThread;
 use eframe::NativeOptions;
+use egui::CentralPanel;
 use mercator::Position;
 use tiles::Tiles;
 
 struct SlippyMapExample {
     my_position: Position,
     tiles: tiles::Tiles,
+
+    #[allow(dead_code)] // Significant Drop
     tokio_thread: tokio::TokioRuntimeThread,
 }
 
@@ -30,8 +33,10 @@ impl SlippyMapExample {
 }
 
 impl eframe::App for SlippyMapExample {
-    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
-        //map::ui(self.my_position, ctx, ui, id_source, follow)
+    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        CentralPanel::default().show(ctx, |ui| {
+            map::ui(self.my_position, ctx, ui, "map", &mut self.tiles);
+        });
     }
 }
 
@@ -39,7 +44,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     eframe::run_native(
         "egui slippy map example",
         NativeOptions::default(),
-        Box::new(|cc| Box::new(SlippyMapExample::new())),
+        Box::new(|_cc| Box::new(SlippyMapExample::new())),
     )
     .map_err(|e| e.into())
 }

@@ -114,7 +114,6 @@ pub(crate) fn ui(
     ctx: &Context,
     ui: &mut Ui,
     id_source: impl std::hash::Hash,
-    follow: Option<MapCenterMode>,
     tiles: &mut Tiles,
 ) {
     let (rect, response) = ui.allocate_exact_size(ui.available_size(), Sense::drag());
@@ -149,10 +148,6 @@ pub(crate) fn ui(
                 }
             });
         });
-
-    if let Some(follow) = follow {
-        memory.center_mode = follow;
-    }
 
     memory
         .center_mode
