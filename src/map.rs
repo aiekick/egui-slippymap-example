@@ -1,10 +1,8 @@
 use std::collections::{hash_map::Entry, HashMap};
 
 use crate::mercator::Position;
-use eframe::epaint::CircleShape;
 use egui::{
-    Align2, Color32, Context, FontId, Id, Mesh, Painter, Pos2, Response, RichText, Sense, Shape,
-    Stroke, Ui, Vec2, Window,
+    Align2, Context, FontId, Id, Mesh, Painter, Pos2, Response, RichText, Sense, Ui, Window,
 };
 
 use crate::{
@@ -45,7 +43,6 @@ impl MapCenterMode {
 #[derive(Clone)]
 struct MapMemory {
     center_mode: MapCenterMode,
-    osm: bool,
     zoom: u8,
 }
 
@@ -53,7 +50,6 @@ impl Default for MapMemory {
     fn default() -> Self {
         Self {
             center_mode: MapCenterMode::MyPosition,
-            osm: false,
             zoom: 16,
         }
     }
