@@ -35,6 +35,7 @@ impl SlippyMapExample {
 impl eframe::App for SlippyMapExample {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         CentralPanel::default().show(ctx, |ui| {
+            ui.hyperlink("https://www.openstreetmap.org");
             map::ui(self.my_position, ctx, ui, "map", &mut self.tiles);
         });
     }
