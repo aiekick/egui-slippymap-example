@@ -130,8 +130,6 @@ pub(crate) fn ui(
         .title_bar(false)
         .anchor(Align2::LEFT_BOTTOM, [10., -10.])
         .show(ctx, |ui| {
-            ui.checkbox(&mut memory.osm, "OSM");
-
             ui.horizontal(|ui| {
                 if ui
                     .button(RichText::new("➕").font(FontId::proportional(20.)))
@@ -149,6 +147,19 @@ pub(crate) fn ui(
             });
         });
 
+    if memory.center_mode != MapCenterMode::MyPosition {
+        Window::new("Center")
+            .collapsible(false)
+            .resizable(false)
+            .title_bar(false)
+            .anchor(Align2::CENTER_BOTTOM, [10., -10.])
+            .show(ctx, |ui| {
+                if ui.button("center").clicked() {
+                    memory.center_mode = MapCenterMode::MyPosition;
+                }
+            });
+    }
+
     memory
         .center_mode
         .screen_drag(response, my_position, memory.zoom);
@@ -163,22 +174,20 @@ pub(crate) fn ui(
 
     let painter = ui.painter().with_clip_rect(rect);
 
-    if memory.osm {
-        let mut shapes = Default::default();
-        draw_tiles(
-            &painter,
-            map_center.tile(memory.zoom),
-            map_center_projected_position,
-            memory.zoom,
-            screen_center,
-            tiles,
-            ui,
-            &mut shapes,
-        );
+    let mut shapes = Default::default();
+    draw_tiles(
+        &painter,
+        map_center.tile(memory.zoom),
+        map_center_projected_position,
+        memory.zoom,
+        screen_center,
+        tiles,
+        ui,
+        &mut shapes,
+    );
 
-        for (_, shape) in shapes {
-            painter.add(shape);
-        }
+    for (_, shape) in shapes {
+        painter.add(shape);
     }
 
     ui.ctx().data_mut(|data| data.insert_persisted(id, memory));
